@@ -9,7 +9,7 @@
 import os, os.path
 import sys
 from sremail import ServerReportEmail
-from srplugin import ServerReportPluginBase
+from srplugin import ServerReportPluginBase, ServerReportPluginReplaceFile, ServerReportPluginExcludeFile
 
 PLUGIN_DIR="~/workspace/code/serverreport/plugins"
 DEBUG_MODE=True
@@ -61,12 +61,34 @@ if __name__ == '__main__':
     for plugin_file in plugin_files:
         __import__(plugin_file, None, None, [''])
 
-    
+	plugins_loaded = []
+
+	# Load a ReplaceFile plugins
+	for master_plugin in ServerReportPluginBase.__subclasses__():
+		if len( master_plugin.__subclasses__() ) == 0:
+			continue
+		for plugin in master_plugin.__subclasses__():
+			p = plugin()
+			msg = p.collect()
+			if msg is not None:
+				mail.add_content(msg)
+			plugins_loaded.append(plugin)
+			
+			#for plugin in ServerReportPluginReplaceFile.__subclasses__():
+			#p = plugin()
+			#mail.add_content(p.collect())
+			#plugins_loaded.append(plugin)
+
+	# Other plugins from Base
     for plugin in ServerReportPluginBase.__subclasses__():
-        p = plugin()
-        mail.add_content(p.collect())
+		if plugin in plugins_loaded:
+			continue
+		p = plugin()
+		msg = p.collect()
+		if msg is not None:
+			mail.add_content(msg)
 
     if ( DEBUG_MODE):
         print("Now message will be sent...")
 
-    mail.send()
+	mail.send()

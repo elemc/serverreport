@@ -15,7 +15,7 @@ class ServerReportEmail(object):
     def __init__(self):
         self._uname()
         self._mainmsg = MIMEMultipart()
-        self._mainmsg['Subject'] = "%s report from %s" % (REPORT_PERIOD_TYPE, self.uname_nodename)
+        self._mainmsg['Subject'] = EMAIL_SUBJECT % (self.uname_nodename, REPORT_PERIOD_TYPE)
         self._mainmsg['From'] = EMAIL_FROM
         self._mainmsg['To'] = str(', ').join(EMAIL_TO)
         self._mainmsg.preamble = "%s report from %s %s %s %s %s" % (
