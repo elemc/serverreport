@@ -6,7 +6,7 @@
 # e-mail: me AT elemc DOT name      #
 # ================================= #
 
-from srplugin import ServerReportPluginReplaceFile
+from srpluginfile import ServerReportPluginReplaceFile
 
 class LoginsPlugin(ServerReportPluginReplaceFile):
 	filename_for_report = "/Users/alex/workspace/temp/secure"

@@ -9,7 +9,8 @@
 import os, os.path
 import sys
 from sremail import ServerReportEmail
-from srplugin import ServerReportPluginBase, ServerReportPluginReplaceFile, ServerReportPluginExcludeFile
+from srplugin import ServerReportPluginBase
+from srpluginfile import ServerReportPluginReplaceFile, ServerReportPluginExcludeFile
 
 PLUGIN_DIR="~/workspace/code/serverreport/plugins"
 DEBUG_MODE=True
@@ -46,8 +47,6 @@ class ServerReportPlugins(object):
     def __iter__(self):
         return self.plugins.__iter__()
         
-    
-
 if __name__ == '__main__':
     mail = ServerReportEmail()
 
@@ -62,8 +61,7 @@ if __name__ == '__main__':
         __import__(plugin_file, None, None, [''])
 
 	plugins_loaded = []
-
-	# Load a ReplaceFile plugins
+	# Load a plugins
 	for master_plugin in ServerReportPluginBase.__subclasses__():
 		if len( master_plugin.__subclasses__() ) == 0:
 			continue
