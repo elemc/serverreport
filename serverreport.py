@@ -12,8 +12,8 @@ from sremail import ServerReportEmail
 from srplugin import ServerReportPluginBase
 from srpluginfile import ServerReportPluginReplaceFile, ServerReportPluginExcludeFile
 
-PLUGIN_DIR="~/workspace/code/serverreport/plugins"
-DEBUG_MODE=True
+PLUGIN_DIR="/usr/local/share/serverreport/plugins"
+DEBUG_MODE=False
 
 class ServerReportPlugins(object):
     def __init__(self, plugins_dir = PLUGIN_DIR):
@@ -48,7 +48,10 @@ class ServerReportPlugins(object):
         return self.plugins.__iter__()
         
 if __name__ == '__main__':
-    mail = ServerReportEmail()
+    if len(sys.argv) == 1:
+        print("Usage as %s <email@address>" % sys.argv[0])
+        os._exit(1)
+    mail = ServerReportEmail(sys.argv[1])
 
     plugins_dir = os.path.expanduser(PLUGIN_DIR)
     if ( DEBUG_MODE ):
@@ -86,7 +89,7 @@ if __name__ == '__main__':
 		if msg is not None:
 			mail.add_content(msg)
 
-    if ( DEBUG_MODE):
+    if ( DEBUG_MODE ):
         print("Now message will be sent...")
 
-	mail.send()
+    mail.send()

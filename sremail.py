@@ -12,19 +12,14 @@ import os
 import smtplib
 
 class ServerReportEmail(object):
-    def __init__(self):
-        self._uname()
+    def __init__(self, email):
+        #self._uname()
+        self.email_to = email
         self._mainmsg = MIMEMultipart()
-        self._mainmsg['Subject'] = EMAIL_SUBJECT % (self.uname_nodename, REPORT_PERIOD_TYPE)
+        self._mainmsg['Subject'] = EMAIL_SUBJECT #% (self.uname_nodename, REPORT_PERIOD_TYPE)
         self._mainmsg['From'] = EMAIL_FROM
-        self._mainmsg['To'] = str(', ').join(EMAIL_TO)
-        self._mainmsg.preamble = "%s report from %s %s %s %s %s" % (
-            REPORT_PERIOD_TYPE,
-            self.uname_sysname,
-            self.uname_nodename,
-            self.uname_release,
-            self.uname_version,
-            self.uname_machine )
+        self._mainmsg['To'] = self.email_to
+        self._mainmsg.preamble = "Сертификаты на сервер koji.russianfedora.ru"
         
     def _uname(self):
         (self.uname_sysname,
@@ -41,9 +36,9 @@ class ServerReportEmail(object):
         if SMTP_USE_SSL:
             s = smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT)
         else:
-            s = smtplib.SMPT(SMTP_HOST, SMTP_PORT)
+            s = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
         s.login(SMTP_USER, SMTP_PASSWORD)
-        s.sendmail(EMAIL_FROM, EMAIL_TO, self._mainmsg.as_string())
+        s.sendmail(EMAIL_FROM, self.email_to, self._mainmsg.as_string())
 
     def __del__(self):
         pass
