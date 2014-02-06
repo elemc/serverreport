@@ -23,7 +23,7 @@ if [ "$EMAIL" == "" ]; then
 fi
 
 if [ "$BPWD" == "" ]; then
-	usege
+	usage
 	exit 1
 fi
 
@@ -41,8 +41,8 @@ sed -i "s|info@russianfedora.ru|${EMAIL}|g" ssl.cnf
 
 # Step 2. Run gen_user_certs
 echo "Run cert files generator..."
-#./gen_user_certs.sh $USERNAME
-/usr/local/bin/generate_koji_user_certs_archive.sh ${USERNAME}
+./gen_user_certs.sh $USERNAME
+#/usr/local/bin/generate_koji_user_certs_archive.sh ${USERNAME}
 
 # Step 3. Make conf-file
 if [ -f $PARAMS_FILE ]; then
@@ -58,3 +58,4 @@ python /usr/local/share/serverreport/serverreport.py ${EMAIL}
 # Step 5. Clean
 mv ssl.cnf.original ssl.cnf
 popd
+
